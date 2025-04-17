@@ -1,0 +1,17 @@
+post_install() {
+  systemctl enable ath11k-suspend.service
+  systemctl enable ath11k-resume.service
+
+  if systemctl list-unit-files --type=service | grep -q '^NetworkManager.service'; then
+    echo "Restarting NetworkManager.service..."
+    systemctl restart NetworkManager.service
+  fi
+}
+
+post_remove() {
+  systemctl disable ath11k-suspend.service
+  systemctl disable ath11k-resume.service
+
+  systemctl daemon-reload
+}
+
